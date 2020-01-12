@@ -1,0 +1,20 @@
+({
+	calculateDate : function(component, event, helper) {
+        let date = component.get("v.date");
+        if(date != null){
+        component.set("v.showResult",true);
+        return;
+        }
+        component.set("v.showResult", false);
+    },
+    checkForNull : function(component, event, helper){
+        let date = component.get("v.date");
+        if(date != null) {
+            component.set("v.buttonEnabled",false);
+            return;
+            }
+        component.set("v.buttonEnabled", true);
+        component.set("v.showResult",false);
+        helper.Show($A.get("$Label.c.TimeDateContrErrorText"),$A.get("$Label.c.TitleError"));
+    }
+})
