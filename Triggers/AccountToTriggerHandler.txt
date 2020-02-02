@@ -1,0 +1,23 @@
+public class AccountToTriggerHandler extends TriggerHandler {
+    
+public override void afterInsert(){
+	List<Contact> Contacts= new List<Contact>();      
+	for(Account acc:(List<Account>)Trigger.New){
+		Contact contact = new Contact(FirstName=acc.Name,AccountId=acc.Id,LastName=acc.Name);
+        Contacts.add(contact);
+	}
+	insert Contacts;
+}
+    
+public override void afterUpdate(){
+    List<Account> newAccounts = (List<Account>)trigger.new;
+    List<Account> oldAccounts = (List<Account>)trigger.old;
+    List<Contact> Contacts= new List<Contact>([SELECT LastName,AccountId FROM Contact WHERE AccountId=:newAccounts[0].Id ]);
+    if(newAccounts[0].Name!=oldAccounts[0].Name&&Contacts.size()>0){
+        for(Contact Cont:Contacts){
+ 			Cont.LastName = newAccounts[0].Name;
+		}  
+	    update Contacts;
+    }
+}
+}
